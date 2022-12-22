@@ -34,11 +34,22 @@ impl<'a> Iterator for JpCommonLabelFeatureIter<'a> {
     type Item = &'a str;
     fn next(&mut self) -> Option<Self::Item> {
         let label_features_ptr = self.label_features as *const JpCommonLabelFeature as *mut *mut i8;
+        #[cfg(not(target_arch = "aarch64"))]
         unsafe {
             if self.index < self.size {
                 let label_feature = *label_features_ptr.offset(self.index as isize);
                 self.index += 1;
                 Some(CStr::from_ptr(label_feature).to_str().unwrap())
+            } else {
+                None
+            }
+        }
+        #[cfg(target_arch = "aarch64")]
+        unsafe {
+            if self.index < self.size {
+                let label_feature = *label_features_ptr.offset(self.index as isize);
+                self.index += 1;
+                Some(CStr::from_ptr(label_feature as u8).to_str().unwrap())
             } else {
                 None
             }

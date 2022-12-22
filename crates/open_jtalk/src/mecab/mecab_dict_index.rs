@@ -9,5 +9,8 @@ pub fn mecab_dict_index(argv: &[&str]) {
         .iter()
         .map(|cs| cs.as_ptr() as *mut i8)
         .collect::<Vec<_>>();
+    #[cfg(not(target_arch = "aarch64"))]
     unsafe { open_jtalk_sys::mecab_dict_index(argv.len() as i32, argv.as_mut_ptr()) };
+    #[cfg(target_arch = "aarch64")]
+    unsafe { open_jtalk_sys::mecab_dict_index(argv.len() as i32, argv.as_mut_ptr() as u8) };
 }
