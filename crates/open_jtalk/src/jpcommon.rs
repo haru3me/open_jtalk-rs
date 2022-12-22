@@ -49,7 +49,7 @@ impl<'a> Iterator for JpCommonLabelFeatureIter<'a> {
             if self.index < self.size {
                 let label_feature = *label_features_ptr.offset(self.index as isize);
                 self.index += 1;
-                Some(CStr::from_ptr(label_feature as u8).to_str().unwrap())
+                Some(CStr::from_ptr(label_feature as *const u8).to_str().unwrap())
             } else {
                 None
             }
