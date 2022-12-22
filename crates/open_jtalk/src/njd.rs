@@ -59,7 +59,7 @@ impl Njd {
     }
 
     pub fn mecab2njd(&mut self, mecab_feature: &MecabFeature, mecab_feature_size: i32) {
-        #[cfg(not(target_arch = "aarch64"))]
+        #[cfg(not(all(target_os = "linux", target_arch = "aarch64")))]
         unsafe {
             open_jtalk_sys::mecab2njd(
                 self.as_raw_ptr(),
@@ -67,7 +67,7 @@ impl Njd {
                 mecab_feature_size,
             )
         }
-        #[cfg(target_arch = "aarch64")]
+        #[cfg(all(target_os = "linux", target_arch = "aarch64"))]
         unsafe {
             open_jtalk_sys::mecab2njd(
                 self.as_raw_ptr(),

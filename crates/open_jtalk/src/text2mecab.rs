@@ -10,7 +10,7 @@ pub enum Text2MecabError {
         open_jtalk_sys::text2mecab_result_t::TEXT2MECAB_RESULT_INVALID_ARGUMENT as i32,
 }
 
-#[cfg(not(target_arch = "aarch64"))]
+#[cfg(not(all(target_os = "linux", target_arch = "aarch64")))]
 pub fn text2mecab(input: impl AsRef<str>) -> Result<String, Text2MecabError> {
     // NOTE:text2mecabのoutputに必要な必要な長さがわからないため8192決め打ちにしている
     // https://github.com/VOICEVOX/voicevox_core/issues/128#issuecomment-1168181887
@@ -39,7 +39,7 @@ pub fn text2mecab(input: impl AsRef<str>) -> Result<String, Text2MecabError> {
         Err(unsafe { std::mem::transmute(result) })
     }
 }
-#[cfg(target_arch = "aarch64")]
+#[cfg(all(target_os = "linux", target_arch = "aarch64"))]
 pub fn text2mecab(input: impl AsRef<str>) -> Result<String, Text2MecabError> {
     // NOTE:text2mecabのoutputに必要な必要な長さがわからないため8192決め打ちにしている
     // https://github.com/VOICEVOX/voicevox_core/issues/128#issuecomment-1168181887

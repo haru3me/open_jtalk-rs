@@ -34,7 +34,7 @@ impl<'a> Iterator for JpCommonLabelFeatureIter<'a> {
     type Item = &'a str;
     fn next(&mut self) -> Option<Self::Item> {
         let label_features_ptr = self.label_features as *const JpCommonLabelFeature as *mut *mut i8;
-        #[cfg(not(target_arch = "aarch64"))]
+        #[cfg(not(all(target_os = "linux", target_arch = "aarch64")))]
         unsafe {
             if self.index < self.size {
                 let label_feature = *label_features_ptr.offset(self.index as isize);
@@ -44,7 +44,7 @@ impl<'a> Iterator for JpCommonLabelFeatureIter<'a> {
                 None
             }
         }
-        #[cfg(target_arch = "aarch64")]
+        #[cfg(all(target_os = "linux", target_arch = "aarch64"))]
         unsafe {
             if self.index < self.size {
                 let label_feature = *label_features_ptr.offset(self.index as isize);
