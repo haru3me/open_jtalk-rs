@@ -34,3 +34,4 @@ jobs:
       - uses: ./.github/actions/auto_gen_bind_pr
         with:
           triple: ${{ matrix.target.triple }}
+
