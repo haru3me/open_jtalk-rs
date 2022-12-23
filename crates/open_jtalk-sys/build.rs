@@ -45,9 +45,8 @@ fn generate_bindings(include_dir: impl AsRef<Path>) {
         .size_t_is_usize(true)
         .rustfmt_bindings(true)
         .rustified_enum("*");
-    let paths = std::fs::read_dir(&include_dir).unwrap();
-    for path in paths {
-        let path = path.unwrap();
+    for entry in include_dir.read_dir().unwrap().filter_map(|e| e.ok()) {
+        let path = entry.path();
         let file_name = path.file_name().to_str().unwrap().to_string();
         bind_builder =
             bind_builder.allowlist_file(format!(".*{}", file_name.replace(".h", "\\.h")));
