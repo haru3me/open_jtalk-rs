@@ -47,7 +47,7 @@ fn generate_bindings(include_dir: impl AsRef<Path>) {
         .rustified_enum("*");
     for entry in include_dir.read_dir().unwrap().filter_map(|e| e.ok()) {
         let path = entry.path();
-        let file_name = path.file_name().to_str().unwrap().to_string();
+        let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
         bind_builder =
             bind_builder.allowlist_file(format!(".*{}", file_name.replace(".h", "\\.h")));
     }
